@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="row">
+  	<div class="col-xs-12">
+
+<form>
+  
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="Group Name" ng-model="body.newGroup.name">
+  </div>
+  
+  <div class="form-group">
+  	<textarea class="form-control" rows="3" placeholder="Group Description" ng-model="body.newGroup.description"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <div class="input-group">
+    	<input type="text" class="form-control" placeholder="Default Location" ng-model="body.newGroup.location">
+  		<div class="input-group-addon" ng-click="body.newGroup.location = '77 Mass Ave, Cambridge, MA 02139' "><span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></div>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="input-group">
+    	<div class="input-group-addon"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></div>
+    	<input type="text" class="form-control" placeholder="Default Meal Price">
+    </div>
+  </div>
+
+	<br><br>
+	<span class="text-gray">MEALS:</span> 
+	<a class="btn btn-default pull-right" href="#/meal/new" role="button" ng-click="body.initNewMeal()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Meal</a>
+	<br><br>
+	
+
+	<div ng-show="body.meals && body.meals.length > 0 ">
+		<div ng-repeat="meal in body.meals">
+			
+		</div>
+	</div>
+	<table class="table table-hover" ng-show="body.meals && body.meals.length > 0">
+		<tr><th>Name</th><th>Style</th><th>Recurring</th></tr>
+		<tr ng-repeat="meal in body.meals"><td>{{meal.name}}</td><td>{{meal.style}}</td><td>{{meal.repeatInterval}}: {{body.printWeekdays(meal)}}</td></tr>
+	</table>
+	<div class="text-muted" ng-hide="body.meals && body.meals.length > 0 ">
+		<em>No meals.</em>
+	</div>
+
+  <br><br>
+  <div class="form-group">
+  	<strong>Privacy:</strong> {{body.newGroup.privacy}}
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="privacyRadios" id="privacyRadios1" ng-model="body.newGroup.privacy" value="Public" checked>
+	    <strong>Public:</strong> visible group and members 
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="privacyRadios" id="privacyRadios2" ng-model="body.newGroup.privacy" value="Semi-Public">
+	    <strong>Semi-Public:</strong> visible group, hidden members
+	  </label>
+	</div>
+	<div class="radio disabled">
+	  <label>
+	    <input type="radio" name="privacyRadios" id="privacyRadios3" ng-model="body.newGroup.privacy" value="Private">
+	    <strong>Private:</strong> hidden group and members
+	  </label>
+	</div>
+  </div>
+	
+	<br><br>
+	<span class="text-gray">CANCELATION POLICY:</span> 
+	<a class="btn btn-default pull-right" href="" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Penalty</a>
+	<br><br>
+	<div ng-show="body.newGroup.penalties && body.newGroup.penalties.length > 0">
+		<div ng-repeat="penalty in body.newGroup.penalties">
+			
+		</div>
+	</div>
+	<div class="text-muted" ng-hide="body.newGroup.penalties && body.newGroup.penalties.length > 0">
+		<em>No Penalty.</em>
+	</div>
+  <br><br>
+  <a class="btn btn-default" href="#/account" role="button" ng-click="body.addNewGroup()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create Group</a>
+  <a class="btn btn-default" href="#/account" role="button" ng-click="body.cancelNewGroup()">Cancel</a>
+
+
+
+
+</form>
+
+	</div>
+  </div>
+</div>

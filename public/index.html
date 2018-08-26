@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<title>PoolGameTrackerApp</title>
+
+		<!--–––––––––––––––––––– css (as high in the head as possible) ––––––––––––––––––––-->
+		<!-- jquery ui theme (blacktie)  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/black-tie/jquery-ui.css"> -->
+		<!-- bootstrap --> 					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- bootstrap theme (optional) --> <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"> -->
+		<!-- Font Awesome--> 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<!-- nvde.js <-->					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.0/nv.d3.min.css">
+		<!-- my css --> 					<link rel="stylesheet" href="style.css">
+		
+		<!--–––––––––––––––––––– javascript (some need to load before body) ––––––––––––––––––––-->
+		<!-- html5 shim --> 		<!-- IE8 support of HTML5 elements -->
+		<!-- respond.js --> 		<!-- IE8 support of media queries. WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!-- jquery -->				<!--[if lt IE 9]>
+										<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+										<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+										<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+									<![endif]-->
+									<!--[if gte IE 9]><!-->
+										<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+									<!--<![endif]-->
+		<!-- jquery ui --> 			<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<!-- angular --> 			<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+		<!-- angular router --> 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js"></script>
+		<!-- firebase --> 			<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+		<!-- AngularFire --> 		<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+		<!-- d3.js --> 				<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+		<!-- nvd3.js -->			<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.0/nv.d3.min.js"></script>
+		<!-- angularjs-nvd3-directives --> 	<!-- <script src="js/angularjs-nvd3-directives.min.js"></script> -->
+		<!-- Dropbox choose/save files -->	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="77n9k0su7kd0rde"></script>
+		<!-- my angular -->
+			<script src="app.module.js"></script> <!-- must be first? -->
+			<script src="app.config.js"></script>
+			<script src="app.routes.js"></script>
+			<script src="body.controller.js"></script>
+			<!-- <script src="player.directive.js"></script> -->
+		
+	</head>
+	<body ng-controller="BodyCtrl as body">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#/account">PoolGameTrackerApp</a>
+
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul ng-if="body.username" class="nav navbar-nav navbar-right">
+		        <li class="dropdown">
+		          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{body.username}}<!-- <span class="badge">12</span> --> <span class="caret"></span></a>
+		          <ul class="dropdown-menu" role="menu">
+		            <li><a href="">Inbox <span class="badge">12</span></a></li>
+		            <li><a href="">Settings</a></li>
+		            <li class="divider"></li>
+		            <li ng-click="body.username = null"><a href="#/">Log Out</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		    </div> <!-- /.navbar-collapse -->
+
+		  </div><!-- /.container-fluid -->
+		</nav>
+
+		<div ng-view></div>
+
+
+		<div class="bootstrap-col-size">
+			<span class="badge visible-xs-inline transparent">Boostrap: extra-small</span>
+			<span class="badge visible-sm-inline transparent">Boostrap: small</span>
+			<span class="badge visible-md-inline transparent">Boostrap: medium</span>
+			<span class="badge visible-lg-inline transparent">Boostrap: large</span>
+		</div>
+		<!--–––––––––––––––––––– javascript (as low in the body as possible) ––––––––––––––––––––-->
+		<!-- bootstrap + plugins --> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	</body>
+</html>

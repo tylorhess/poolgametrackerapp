@@ -1,0 +1,231 @@
+<div class="container-fluid">
+  <div class="row">
+  	<div class="col-xs-12 col-sm-8 col-md-6">
+
+<form>
+  
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="Group" ng-model="body.newMeal.group">
+  </div>
+
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="Meal Name" ng-model="body.newMeal.name">
+  </div>
+  
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="Meal Host" ng-model="body.newMeal.host">
+  </div>
+
+  <div class="form-group">
+  	<textarea class="form-control" rows="3" placeholder="Meal Description" ng-model="body.newMeal.description"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <div class="input-group">
+    	<input type="text" class="form-control" placeholder="Meal Location" ng-model="body.newMeal.location">
+  		<div class="input-group-addon" ng-click="body.newMeal.location = '77 Mass Ave, Cambridge, MA 02139' "><span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+  	<div class="input-group">
+  		<input type="text" class="form-control" placeholder="Start Date" ng-model="body.newMeal.startDate">
+  		<div class="input-group-addon" ng-click="body.setStartDateToToday()"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
+  	</div>
+  </div>
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="Start Time" ng-model="body.newMeal.startTime">
+  </div>
+  <div class="form-group">
+  	<div class="input-group">
+  		<input type="text" class="form-control" placeholder="End Date" ng-model="body.newMeal.endDate">
+  		<div class="input-group-addon" ng-click="body.setEndDateToToday()"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
+  	</div>
+  </div>
+  <div class="form-group">
+  	<input type="text" class="form-control" placeholder="End Time" ng-model="body.newMeal.endTime">
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="body.newMeal.repeat"> Repeat
+    </label>
+  </div>
+
+  <div class="form-group" ng-show="body.newMeal.repeat">
+  	<strong>Repeat Interval:</strong> {{body.newMeal.repeatInterval}}
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="repeatIntervalRadios" id="repeatIntervalRadios1" ng-model="body.newMeal.repeatInterval" value="Daily">
+	    Daily
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="repeatIntervalRadios" id="repeatIntervalRadios2" ng-model="body.newMeal.repeatInterval" value="Weekly" checked>
+	    Weekly
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="repeatIntervalRadios" id="repeatIntervalRadios3" ng-model="body.newMeal.repeatInterval" value="Monthly">
+	    Monthly
+	  </label>
+	</div>
+	<div class="radio disabled">
+	  <label>
+	    <input type="radio" name="repeatIntervalRadios" id="repeatIntervalRadios4" ng-model="body.newMeal.repeatInterval" value="Yearly" disabled>
+	    Yearly
+	  </label>
+	</div>
+  </div>
+
+  <div class="form-group" ng-show="body.newMeal.repeat">
+    <strong>Repeat Every:</strong> 
+    <input type="text" class="form-control" placeholder="#" ng-model="body.newMeal.repeatLength" style="width:4em; display:inline-block; !important">
+    <span ng-show="body.newMeal.repeatInterval === 'Daily' ">days</span>
+  	<span ng-show="body.newMeal.repeatInterval === 'Weekly' ">weeks</span>
+  	<span ng-show="body.newMeal.repeatInterval === 'Monthly' ">months</span>
+  	<span ng-show="body.newMeal.repeatInterval === 'Yearly' ">years</span>
+  </div>
+
+  <div ng-show="body.newMeal.repeat" ng-hide="body.newMeal.repeatInterval === 'Weekly' || body.newMeal.repeatInterval === 'Monthly'  ">
+  	<br>
+  </div>
+
+  <div class="form-group" ng-show="body.newMeal.repeat && body.newMeal.repeatInterval === 'Weekly' ">
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatSunday">
+	    Sunday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatMonday">
+	    Monday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatTuesday">
+	    Tuesday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatWednesday">
+	    Wednesday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatThursday">
+	    Thursday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatFriday">
+	    Friday
+	  </label>
+	</div>
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox" ng-model="body.newMeal.repeatSaturday">
+	    Saturday
+	  </label>
+	</div>
+  </div>
+
+  <div class="form-group" ng-show="body.newMeal.repeat && body.newMeal.repeatInterval === 'Monthly' ">
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="repeatMonthly" id="repeatMonthly1" ng-model="body.newMeal.repeatMonthly" value="Number Day" checked>
+	    on the 10th of the month
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="repeatMonthly" id="repeatMonthly2" ng-model="body.newMeal.repeatMonthly" value="Day of the Week">
+	    on the second Thursday of the month
+	  </label>
+	</div>
+  </div>
+
+  <div class="form-group" ng-show="body.newMeal.repeat">
+	<strong>End Repeat:</strong> 
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="endRepeat" id="endRepeat1" ng-model="body.newMeal.endRepeat" value="Occurrences" checked>
+	    after
+		<input type="text" class="form-control" placeholder="#" ng-model="body.newMeal.occurrences" style="width:4em; display:inline-block; !important">
+	    occurrence<span ng-hide="body.newMeal.occurrences === 1 ">s</span>
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="endRepeat" id="endRepeat2" ng-model="body.newMeal.endRepeat" value="Date">
+	    on: <input type="text" class="form-control" placeholder="Repeat End Date" ng-model="body.newMeal.endRepeatDate" style="width:15em; display:inline-block; !important">
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="endRepeat" id="endRepeat3" ng-model="body.newMeal.endRepeat" value="TBD">
+	    TBD
+	  </label>
+	</div>
+  </div>
+
+  <div class="form-group">
+  	<strong>Style:</strong> {{body.newMeal.style}} <span class="pull-right">(<code>N</code> = number of members)</span>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="styleRadios" id="styleRadios1" ng-model="body.newMeal.style" value="Exchange" checked>
+	    <strong>Exchange:</strong> Every member prepares <code>1</code> meal for <code>N</code> people to exchange for <code>N</code> different meals.
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="styleRadios" id="styleRadios2" ng-model="body.newMeal.style" value="Potluck">
+	    <strong>Potluck:</strong> Every member contributes a dish with <code>N</code> servings.
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="styleRadios" id="styleRadios3" ng-model="body.newMeal.style" value="Rotate Host">
+	    <strong>Rotate Host:</strong> Members alternate hosting a meal for <code>N</code> people.
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="styleRadios" id="styleRadios4" ng-model="body.newMeal.style" value="Assign Host">
+	    <strong>Assign Host:</strong> Members are assigned a recurring meal (e.g. - Monday Night Dinner) to prepare for <code>N</code> people.
+	  </label>
+	</div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group">
+    	<div class="input-group-addon"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></div>
+    	<input type="text" class="form-control" placeholder="Meal Price">
+    </div>
+    <div class="text-muted">
+    	<span ng-hide="body.newMeal.style"><br></span>
+    	<span ng-show="body.newMeal.style === 'Exchange'    ">The cost for someone to participate without preparing a meal.</span>
+    	<span ng-show="body.newMeal.style === 'Potluck'     ">The cost for someone to participate without preparing a dish.</span>
+    	<span ng-show="body.newMeal.style === 'Rotate Host' ">The cost for someone to participate without having hosted yet.</span>
+    	<span ng-show="body.newMeal.style === 'Assign Host' ">The cost per meal to make up the difference if members aren't assigned the same number of meals.</span>
+    </div>
+  </div>
+
+  <br><br>
+  <a class="btn btn-default" href="#/group/new" role="button" ng-click="body.addNewMeal()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create Meal</a>
+  <a class="btn btn-default" href="#/group/new" role="button" ng-click="body.cancelNewMeal()">Cancel</a>
+
+
+</form>
+
+	</div>
+  </div>
+</div>
