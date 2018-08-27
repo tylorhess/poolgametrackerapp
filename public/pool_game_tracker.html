@@ -5,11 +5,14 @@
 				<span class="text-gray">LEADERBOARD:</span>
 				<table class="table table-hover">
 					<tr><th>Wins</th><th>Name</th></tr>
-					<tr ng-repeat="player in body.players | orderBy:'wins':true"><td>{{player.wins}}</td><td>{{player.name}}</td></tr>
+					<tr ng-repeat="player in body.players | orderBy:'wins':true" ng-hide="player._id === body.newPlayer._id">
+						<td>{{player.wins}}</td>
+						<td>{{player.name}}<span class="glyphicon glyphicon-remove pull-right" ng-click="body.deletePlayer(player)" aria-hidden="true"></td>
+					</tr>
 					<tr>
 						<td>{{body.newPlayer.wins}}</td>
 						<td>
-							<input type="text" class="form-control" placeholder="Player Name" ng-model="body.newPlayer.name" ng-keydown="$event.keyCode === 13 && body.addNewPlayer()">
+							<input type="text" class="form-control" placeholder="Player Name" ng-model="body.newPlayer.name" ng-keydown="$event.keyCode === 13 && body.updateNewPlayer()">
 						</td>
 				</tr>
 				</table>
@@ -20,7 +23,10 @@
 				<span class="text-gray">GAMES:</span>
 				<table class="table table-hover">
 					<tr><th>Winner</th><th>Loser</th></tr>
-					<tr ng-repeat="game in body.games"><td>{{game.winner.name}} [{{game.winner.wins}}]</td><td>{{game.loser.name}} [{{game.loser.wins}}]</td></tr>
+					<tr ng-repeat="game in body.games" ng-hide="game._id === body.newGame._id">
+						<td>{{game.winner.name}}</td>
+						<td>{{game.loser.name}}<span class="glyphicon glyphicon-remove pull-right" ng-click="body.deleteGame(game)" aria-hidden="true"></td>
+					</tr>
 					<tr>
 						<td>
 							<select class="form-control" ng-model="body.newGame.winner" ng-options="player.name for player in body.players">
@@ -34,7 +40,7 @@
 						</td>
 					</tr>
 				</table>
-				<a class="btn btn-default" role="button" ng-click="body.addNewGame()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Game</a>
+				<a class="btn btn-default" role="button" ng-click="body.updateNewGame()" ng-disabled="!body.newGame.winner || !body.newGame.loser || body.newGame.winner === body.newGame.loser"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Game</a>
 				<br/><br/>
 			</div>
 

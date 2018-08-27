@@ -1,179 +1,159 @@
-// file: misc.controller.js
+// file: body.controller.js
 (function() {/* closure */
 	'use strict';
+	
 	angular
 		.module('app')
 		.controller('BodyCtrl', BodyCtrl);
-	BodyCtrl.$inject=[];
-	function BodyCtrl() {
+	
+	BodyCtrl.$inject=['$log','$http'];
+	function BodyCtrl( $log , $http ) {
+		
+		// private variables
 		let body = this;
-		body.players = [];
-		// body.players = [{name:'Ryan',wins:1},{name:'Amanda',wins:2},{name:'Tylor',wins:0}];
-		body.games   = [];
-		// body.games   = [{winner:{name:'Amanda'},loser:{name:'Tylor'}},{winner:{name:'Amanda'},loser:{name:'Ryan'}},{winner:{name:'Ryan'},loser:{name:'Tylor'}}];
-		body.addNewPlayer = addNewPlayer;
-		body.addNewGame   = addNewGame;
-		/* VARIABLES
-		body.groups = [];
-		body.meals  = [];
-		body.addNewGroup 	= addNewGroup;
-		body.addNewMeal 	= addNewMeal;
-		body.cancelNewGroup = cancelNewGroup;
-		body.cancelNewMeal	= cancelNewMeal;
-		body.initNewGroup 	= initNewGroup;
-		body.initNewMeal 	= initNewMeal;
-		body.isSundayMeal 	= isSundayMeal;
-		body.isMondayMeal 	= isMondayMeal;
-		body.isTuesdayMeal 	= isTuesdayMeal;
-		body.isWednesdayMeal= isWednesdayMeal;
-		body.isThursdayMeal = isThursdayMeal;
-		body.isFridayMeal 	= isFridayMeal;
-		body.isSaturdayMeal = isSaturdayMeal;
-		body.printWeekdays  = printWeekdays;
-		body.setStartDateToToday 	= setStartDateToToday;
-		body.setEndDateToToday 		= setEndDateToToday;
-		body.setEndRepeatDateToToday= setEndRepeatDateToToday;
-		*/
 
-		// put all start-up logic in an activate function
+		// public variables
+		body.players = [];
+		body.games   = [];
+		body.updateNewGame   = updateNewGame;
+		body.updateNewPlayer = updateNewPlayer;
+		body.deleteGame   = deleteGame;
+		body.deletePlayer = deletePlayer;
+
+		// initialize controller
 		activate();
 
+		// all functions (public & private) 
 		function activate() {
-			initNewPlayer();
-			initNewGame();
+			// initialization (put all start-up logic here)
+			loadPlayers();
+			loadGames();
 		}
-		function addNewPlayer() {
-			if (body.newPlayer.name.trim().length > 0) {
-				body.players.push(body.newPlayer);
-				initNewPlayer();
+
+		function calculateWins() {
+			body.players.forEach( player => {player.wins = 0;} );
+			body.games.forEach( game => {
+				body.players.forEach( player => {
+					if (game.winner && game.winner._id === player._id) {
+						player.wins++;
+					}
+				});
+			});
+		}
+
+		function deleteGame(game) {
+			let url = '/games/' + game._id;
+			$log.log('HTTP DELETE ' + url);
+			$http.delete(url)
+				.then(function(res) {
+					$log.log('success: deleteGame()');
+					$log.log(res.data); // res.data = deleted game
+					loadGames();
+				})
+				.catch(function(err) {$log.log(err)})
+		}
+		function deletePlayer(player) {
+			let url = '/players/' + player._id;
+			$log.log('HTTP DELETE ' + url);
+			$http.delete(url)
+				.then(function(res) {
+					$log.log('success: deletePlayer()');
+					$log.log(res.data); // res.data = deleted player
+					loadPlayers();
+				})
+				.catch(function(err) {$log.log(err)})
+		}
+
+		function loadGames() {
+			$http.get('/games')
+				.then(function(res) {
+					$log.log('success: loadGames()');
+					$log.log(res.data);
+					body.games = res.data;
+					resetNewGame();
+					calculateWins();
+				})
+				.catch(function(err) {$log.log(err)})
+		}
+		function loadPlayers() {
+			$http.get('/players')
+				.then(function(res) {
+					$log.log('success: loadPlayers()');
+					$log.log(res.data);
+					body.players = res.data;
+					resetNewPlayer();
+					calculateWins();
+				})
+				.catch(function(err) {$log.log(err)})
+		}
+
+		function resetNewGame() {
+			let i = 0;
+			let newGameReset = false;
+			while (i < body.games.length && !newGameReset) {
+				if (!body.games[i].winner || !body.games[i].loser) {
+					body.newGame = body.games[i];
+					newGameReset = true; 
+				}
+				i++;
+			}
+			if (!newGameReset) {
+				$http.post('/games')
+					.then(function(res) {
+						$log.log('success: resetNewGame()');
+						body.newGame = res.data;
+						$log.log(body.newGame);
+					})
+					.catch(function(err) {$log.log(err)})
+			}
+		}
+		function resetNewPlayer() {
+			let i = 0;
+			let newPlayerReset = false;
+			while (i < body.players.length && !newPlayerReset) {
+				if (!body.players[i].name) {
+					body.newPlayer = body.players[i];
+					newPlayerReset = true; 
+				}
+				i++;
+			}
+			if (!newPlayerReset) {
+				$http.post('/players')
+					.then(function(res) {
+						$log.log('success: resetNewPlayer()');
+						body.newPlayer = res.data;
+						$log.log(body.newPlayer);
+					})
+					.catch(function(err) {$log.log(err)})
 			}
 		}
 
-		function addNewGame() {
-			if (!angular.equals(body.newGame.winner,body.newGame.loser)) {
-				body.newGame.winner.wins++; // increment winner's wins
-				body.games.push(body.newGame);
-				initNewGame();
-			} else {
-				// if winner & loser are the same
+		function updateNewGame() {
+			if (body.newGame.winner && body.newGame.loser && body.newGame.winner !== body.newGame.loser) {
+				let url = '/games/' + body.newGame._id;
+				$log.log('HTTP PUT ' + url);
+				$http.put(url, body.newGame) // update
+					.then(function(res) {
+						$log.log('success: updateNewGame()');
+						$log.log(res.data); // res.data = updated game
+						loadGames();
+					})
+					.catch(function(err) {$log.log(err)})
 			}
 		}
-		function initNewPlayer() {
-			body.newPlayer = {};
-			body.newPlayer.wins = 0;
-			// body.newPlayer.id = ???; // async from db?
-		}
-		function initNewGame() {
-			body.newGame = {};
-			// body.newGame.id = ???; // async from db?
-		}
-		/* FUNCTIONS
-		function addNewGroup() {
-			body.groups.push(body.newGroup);
-			body.newGroup = {};
-		}
-		function addNewMeal() {
-			body.meals.push(body.newMeal);
-			body.newMeal = {};
-		}
-		function cancelNewGroup() {
-			body.newGroup = {};
-		}
-		function cancelNewMeal() {
-			body.newMeal = {};
-		}
-		function initNewGroup() {
-			let group_id = body.groups.length;
-			body.newGroup = {
-				id: group_id,
-				penalties: []
-			};
-		}
-		function initNewMeal() {
-			body.newMeal = {
-				group: body.newGroup.name,
-				repeat: true,
-				repeatInterval: 'Weekly',
-				repeatLength: 1
-			};
-		}
-		function isSundayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatSunday)
-					return true;
+		function updateNewPlayer() {
+			if (body.newPlayer && body.newPlayer.name && body.newPlayer.name.trim().length > 0) {
+				let url = '/players/' + body.newPlayer._id;
+				$log.log('HTTP PUT ' + url);
+				$http.put(url, body.newPlayer) // update
+					.then(function(res) {
+						$log.log('success: updateNewPlayer()');
+						$log.log(res.data); // res.data = updated player
+						loadPlayers();
+					})
+					.catch(function(err) {$log.log(err)})
 			}
-			return false;
 		}
-		function isMondayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatMonday)
-					return true;
-			}
-			return false;
-		}
-		function isTuesdayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatTuesday)
-					return true;
-			}
-			return false;
-		}
-		function isWednesdayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatWednesday)
-					return true;
-			}
-			return false;
-		}
-		function isThursdayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatThursday)
-					return true;
-			}
-			return false;
-		}
-		function isFridayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatFriday)
-					return true;
-			}
-			return false;
-		}
-		function isSaturdayMeal() {
-			for (let index in body.meals) {
-				if (body.meals[index].repeatSaturday)
-					return true;
-			}
-			return false;
-		}
-		function printWeekdays(meal) {
-			let printArray = [];
-			if (meal.repeatSunday)
-				printArray.push('Sun');
-			if (meal.repeatMonday)
-				printArray.push('Mon');
-			if (meal.repeatTuesday)
-				printArray.push('Tues');
-			if (meal.repeatWednesday)
-				printArray.push('Wed');
-			if (meal.repeatThursday)
-				printArray.push('Thurs');
-			if (meal.repeatFriday)
-				printArray.push('Fri');
-			if (meal.repeatSaturday)
-				printArray.push('Sat');
-
-			return printArray.join(', ');
-		}
-		function setStartDateToToday() {
-			body.newMeal.startDate = 'Dec 10, 2015';
-		}
-		function setEndDateToToday() {
-			body.newMeal.endDate = 'Dec 10, 2015';
-		}
-		function setEndRepeatDateToToday() {
-			body.newMeal.endRepeatDate = 'Dec 10, 2015';
-		}
-		*/
+		
 	}
 })();/* closure */
