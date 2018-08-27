@@ -12,7 +12,8 @@ app.use(bodyParser.json());	// contentType: 'application/json'
 let mongoose = require('mongoose');
 
 // connect to 'poolGameTrackerApp' database using MongoDB (if it does NOT exist, create it)
-mongoose.connect('mongodb://localhost/poolGameTrackerApp');
+// mongoose.connect('mongodb://localhost/poolGameTrackerApp');
+mongoose.connect('mongodb://heroku_8sr92pjq:a7qd02lms9f57gli13qkvnrhfh@ds133262.mlab.com:33262/heroku_8sr92pjq');
 
 // create 'Player' schema
 let PlayerSchema = new mongoose.Schema({
